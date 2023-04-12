@@ -9,20 +9,58 @@
   vars_files:
     - ./secret_vars.yaml
   tasks:
-#    - name: Add exception for repository directory
-#      shell:
-#        cmd: git config --global --add safe.directory /home/{{playbook_deploy_user}}/{{playbook_app_name}}
-#      become: no
-#
-#    - name: Checkout main branch and pull latest changes
-#      shell:
-#        cmd: git checkout main && git pull
-#        chdir: /home/{{playbook_deploy_user}}/{{playbook_app_name}}
-#      become: no
+    - name: Check if repository exists
+      ansible.builtin.stat:
+        path: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      register: repo_dir
 
-    - name: Execute npx tspath -f dist in /home/deploy/promptinator
+    - name: Clone Git repository if directory does not exist
+      ansible.builtin.git:
+        repo: "{{ git_repo_url }}"
+        dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+        clone: yes
+        update: no
+
+    - name: Create a shared directory
+      ansible.builtin.file:
+        path: /home/{{ playbook_deploy_user }}/shared
+        state: directory
+        mode: '0755'
+
+    - name: Create empty .env file
+      ansible.builtin.file:
+        path: /home/{{ playbook_deploy_user }}/shared/.env
+        state: touch
+        mode: '0755'
+
+    - name: Create .env symlink to shared folder
+      ansible.builtin.file:
+        src: /home/{{ playbook_deploy_user }}/shared/.env
+        dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/.env
+        state: link
+
+    - name: Add exception for repository directory
+      shell:
+        cmd: git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: no
+
+      when: not repo_dir.stat.exists
+
+    - name: Checkout main branch and pull latest changes
+      shell:
+        cmd: git checkout main && git pull
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: no
+
+    - name: install dependencies
+      shell:
+        cmd: npm install
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: no
+
+    - name: Execute npx tspath -f dist
       ansible.builtin.command:
-        cmd: npx tspath -f /home/{{playbook_deploy_user}}/{{playbook_app_name}}/dist
+        cmd: npx tspath -f /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/dist
       become: yes
       register: result
       become_user: deploy
@@ -33,6 +71,6 @@
 
     - name: Run start:prod scripts
       shell:
-        cmd: pm2 reload /home/{{playbook_deploy_user}}/{{playbook_app_name}}/dist/src/server.js
+        cmd: pm2 reload /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/dist/src/server.js
       become: yes
-      become_user: "{{ playbook_deploy_user }}"
+      become_user: deploy
