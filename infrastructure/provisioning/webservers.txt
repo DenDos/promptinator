@@ -1,0 +1,4 @@
+[webserver]
+46.101.243.91 ansible_user=root
+[deploy]
+46.101.243.91 ansible_user=deploy

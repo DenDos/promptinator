@@ -1,0 +1,43 @@
+server {
+  server_name {{ app_domain }};
+  root /home/{{deploy_user}}/{{app_name}}/current/public;
+
+  passenger_enabled on;
+  passenger_app_env production;
+
+  location /cable {
+    passenger_app_group_name {{app_name}}_websocket;
+    passenger_force_max_concurrent_requests_per_process 0;
+  }
+
+  # Allow uploads up to 100MB in size
+  client_max_body_size 100m;
+
+  location ~ ^/(assets|packs) {
+    expires max;
+    gzip_static on;
+  }
+
+  location ^~ /.well-known/acme-challenge/ {
+    break;
+  }
+
+  listen [::]:443 ssl ipv6only=on;
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ app_domain }}/privkey.pem;
+  #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+  #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = {{ app_domain }}) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+  listen 80;
+  listen [::]:80;
+
+  server_name {{ app_domain }};
+    return 404;
+}

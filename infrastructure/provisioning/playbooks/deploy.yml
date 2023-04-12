@@ -1,0 +1,38 @@
+---
+- hosts: deploy
+  vars:
+    git_repo_url: https://github.com/DenDos/promptinator
+    playbook_app_name: promptinator
+    playbook_deploy_user: deploy
+    use_ssl: false
+  become: true
+  vars_files:
+    - ./secret_vars.yaml
+  tasks:
+#    - name: Add exception for repository directory
+#      shell:
+#        cmd: git config --global --add safe.directory /home/{{playbook_deploy_user}}/{{playbook_app_name}}
+#      become: no
+#
+#    - name: Checkout main branch and pull latest changes
+#      shell:
+#        cmd: git checkout main && git pull
+#        chdir: /home/{{playbook_deploy_user}}/{{playbook_app_name}}
+#      become: no
+
+    - name: Execute npx tspath -f dist in /home/deploy/promptinator
+      ansible.builtin.command:
+        cmd: npx tspath -f /home/{{playbook_deploy_user}}/{{playbook_app_name}}/dist
+      become: yes
+      register: result
+      become_user: deploy
+
+    - name: Display standard error
+      debug:
+        var: result.stderr
+
+    - name: Run start:prod scripts
+      shell:
+        cmd: pm2 reload /home/{{playbook_deploy_user}}/{{playbook_app_name}}/dist/src/server.js
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"

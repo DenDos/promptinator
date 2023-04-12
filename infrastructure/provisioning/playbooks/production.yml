@@ -1,0 +1,65 @@
+---
+- hosts: webserver
+  vars:
+    playbook_app_name: promptinator
+    playbook_deploy_user: deploy
+    playbook_app_domain: promptinator.pro
+    use_ssl: false
+  become: true
+  vars_files:
+    - ./secret_vars.yaml
+  roles:
+#    - role: ../roles/add-user-role
+#      user_name: "{{playbook_deploy_user}}"
+#      id_rsa_file: ./secret_id_rsa
+#      id_rsa_pub_key: "{{ secret_id_rsa_pub_key }}"
+#      user_password: "{{ ansible_sudo_pass }}"
+#
+#    - role: ../roles/ansible-role-swap
+#      swap_file_size_mb: 5000
+#
+##    - role: ./roles/amplify-nginx-role
+##      nginx_amplify: true
+##      nginx_amplify_api_key: 'dbc366444c3ce48fb375e39e72bd5f31'
+##      deploy_user: "{{ playbook_deploy_user }}"
+#
+#    - role: ../roles/ansible-role-asdf
+#      asdf_user: "{{ playbook_deploy_user }}"
+#      asdf_group: "{{ playbook_deploy_user }}"
+#      asdf_plugins:
+#        - name: "nodejs"
+#          versions: [ "16.13.2" ]
+#          global: "16.13.2"
+#
+#    - role: ../roles/nginx-app-role
+#      deploy_user: "{{ playbook_deploy_user }}"
+#      app_name: "{{ playbook_app_name }}"
+#      app_domain: "{{playbook_app_domain}}"
+#
+    - role: ../roles/pm2-setup
+#
+#    - role: ../roles/ansible-role-certbot
+#      certbot_install_method: snap
+#      certbot_create_if_missing: true
+#      certbot_admin_email: info@scalemate.co
+#      when: use_ssl
+#      certbot_certs:
+#       - email: cotoha92@gmail.com
+#         domains:
+#           - "{{playbook_app_domain}}"
+#
+#    - role: ../roles/log-rotate-role
+#      deploy_user: "{{ playbook_deploy_user }}"
+#      app_name: "{{ playbook_app_name }}"
+#
+#    - role: ../roles/postgress-app-init
+#      db_user: "{{ playbook_deploy_user }}"
+#      db_name: "{{ playbook_app_name }}"
+#      db_password: "{{ ansible_sudo_pass }}"
+
+#    - role: ../roles/app-setup
+#      deploy_user: "{{ playbook_deploy_user }}"
+#      app_name: "{{ playbook_app_name }}"
+#      app_domain: "{{playbook_app_domain}}"
+#
+#    - role: ../roles/nvim-role

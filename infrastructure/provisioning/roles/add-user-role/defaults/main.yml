@@ -1,0 +1,11 @@
+---
+user_name: deploy
+
+# Additional groups
+user_groups: ['sudo']
+
+id_rsa_key: ''
+id_rsa_pub_key: ''
+
+public_keys:
+  - ~/.ssh/id_rsa.pub

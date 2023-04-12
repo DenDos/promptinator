@@ -1,0 +1,138 @@
+openapi: 3.0.1
+info:
+  title: Shell Command API
+  description: A simple API to run any shell command and return its output
+  version: 1.0.0
+servers:
+  - url: PLUGIN_HOSTNAME  # Replace PLUGIN_HOSTNAME with the actual URL
+paths:
+  '/prompts/{id}':
+    put:
+      operationId: updatePrompt
+      summary: Update an existing prompt with name and prompt by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The is id of the prompt.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/promptRequestBody'
+      responses:
+        '404':
+          description: Prompt not found
+        '200':
+          description: The prompt was updated successfully and the response contains the prompt data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/promptAttributes'
+        '500':
+          description: Internal server error - command execution failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+    delete:
+      operationId: deletePrompt
+      summary: Delete an existing prompt by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: The is id of the prompt.
+      responses:
+        '404':
+          description: Prompt not found
+        '200':
+          description: The prompt was deleted successfully
+        '500':
+          description: Internal server error - command execution failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+  '/prompts':
+    get:
+      operationId: getPrompts
+      summary: Get list of saved prompts
+      responses:
+        '200':
+          description: The list of all available prompts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/promptAttributes'
+        '500':
+          description: Internal server error - command execution failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+    post:
+      operationId: createPrompt
+      summary: Create a new prompt with name and prompt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/promptRequestBody'
+      responses:
+        '200':
+          description: The prompt was created successfully and the response contains the prompt data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/promptAttributes'
+        '500':
+          description: Internal server error - command execution failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+components:
+  schemas:
+    errorMessage:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+    promptAttributes:
+      type: object
+      properties:
+        id:  # Renamed from "prompt" to "id"
+          type: integer
+          description: Id of a prompt
+        prompt:
+          type: string
+          description: Body of a prompt
+        name:
+          type: string
+          description: Name of a prompt
+      required:
+        - id  # Added "id" to the required properties
+        - prompt
+        - name
+    promptRequestBody:
+      type: object
+      properties:
+        prompt:
+          type: string
+          description: Body of a prompt
+        name:
+          type: string
+          description: Name of a prompt
+      required:
+        - prompt
+        - name  # Added "name" to the required properties

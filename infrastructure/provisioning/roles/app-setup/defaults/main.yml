@@ -1,0 +1,5 @@
+---
+app_name: myapp
+deploy_user: deploy
+app_domain: promptinator.pro
+

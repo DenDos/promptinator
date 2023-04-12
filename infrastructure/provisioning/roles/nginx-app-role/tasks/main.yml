@@ -1,0 +1,55 @@
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    update_cache: yes
+    state: present
+
+- name: Start and enable Nginx service
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Check if certbot exists
+  stat:
+    path: /etc/letsencrypt/live/{{app_domain}}/privkey.pem
+  register: certbot_key
+
+- name: Set ngix config without SSL
+  template:
+    src: app_nginx_ip.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}
+    mode: 0644
+  when: certbot_key.stat.exists == False
+  notify: restart nginx
+
+- name: Set ngix config with SSL
+  template:
+    src: app_nginx_ssl.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}
+    mode: 0644
+  when: certbot_key.stat.exists
+  notify: restart nginx
+
+- name: Link app site enabled config
+  file:  # noqa 208
+    src: /etc/nginx/sites-available/{{ app_name }}
+    dest: /etc/nginx/sites-enabled/{{ app_name }}
+    state: link
+  notify: restart nginx
+
+- name: Ensure default virtual host is removed.
+  become: yes
+  file:
+    path: /etc/nginx/sites-available/default
+    state: absent
+  notify: restart nginx
+
+- name: Ensure default virtual host is removed.
+  become: yes
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+

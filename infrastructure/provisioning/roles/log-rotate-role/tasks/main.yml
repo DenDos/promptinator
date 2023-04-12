@@ -1,0 +1,20 @@
+---
+- name: "Create logrotate config file"
+  file:
+    path: /etc/logrotate.d/{{ app_name }}
+    state: touch
+    mode: "0644"
+
+- name: "Add config block to logrotate config file"
+  blockinfile:
+    path: "/etc/logrotate.d/{{ app_name }}"
+    block: |
+      /home/{{ deploy_user }}/{{ app_name }}/current/log/*.log {
+        daily
+        missingok
+        rotate 7
+        compress
+        delaycompress
+        notifempty
+        copytruncate
+      }

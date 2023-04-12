@@ -1,0 +1,74 @@
+---
+- name: "Create a user with name {{ user_name }}"
+  user:
+    append=yes
+    name='{{user_name}}'
+    groups="{{ (user_groups | join(',')) }}"
+    state=present
+    shell=/bin/bash
+    password={{ user_password | password_hash('sha512') }}
+
+- name: Setup sudoers.d
+  lineinfile:
+    dest: /etc/sudoers
+    line: "#includedir /etc/sudoers.d"
+    regexp: "^#includedir /etc/sudoers.d"
+    validate: "visudo -cf %s"
+    state: present
+
+- name: Setup passwordless sudo
+  template:
+    src: deploy_user.j2
+    dest: "/etc/sudoers.d/{{ user_name }}"
+    owner: root
+    group: root
+    mode: 0440
+    validate: "visudo -cf %s"
+
+- name: Make sure home dir for {{user_name}} has the right owner
+  file:
+    path: "/home/{{user_name}}"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+    state: directory
+
+
+- name: Create .ssh for a user
+  file:  # noqa 208
+    path: "/home/{{user_name}}/.ssh"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+    state: directory
+
+- name: generate SSH key id_rsa
+  openssh_keypair:
+    path: "/home/{{user_name}}/.ssh/id_rsa"
+    type: rsa
+    state: present
+    force: true
+
+- name: Setup authorized_keys
+  authorized_key:
+    key: "{{ item }}"
+    user: "{{ user_name }}"
+    state: present
+  with_file: "{{ public_keys }}"
+
+- name: Copy id_rsa.pub ssh key
+  copy:
+    dest: /home/{{user_name}}/.ssh/id_rsa.pub
+    content: "{{id_rsa_pub_key}}"
+    owner: '{{user_name}}'
+    group: '{{user_name}}'
+  when: (id_rsa_pub_key is defined) and (id_rsa_pub_key|length > 0)
+
+- name: Copy # id_rsa ssh key
+  copy:
+    dest: /home/{{user_name}}/.ssh/id_rsa
+    content: |
+      {{item}}
+    # src: "{{item}}"
+    owner: '{{user_name}}'
+    group: '{{user_name}}'
+  with_file: '{{id_rsa_file}}'
+  when: (id_rsa_file is defined) and (id_rsa_file|length > 0)

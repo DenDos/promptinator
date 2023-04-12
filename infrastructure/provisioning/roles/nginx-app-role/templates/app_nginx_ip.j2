@@ -1,0 +1,33 @@
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name _;
+
+  # Serve static files from the "public" directory
+  location /images/ {
+      alias /home/{{ deploy_user }}/{{ app_name }}/public/images;
+  }
+
+  # Reverse proxy for the Node.js application
+  location / {
+      proxy_pass http://localhost:3000; # The address of the Node.js app
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
+  }
+
+  # Allow uploads up to 100MB in size
+  client_max_body_size 100m;
+
+  location ~ ^/(assets|packs) {
+    expires max;
+    gzip_static on;
+  }
+
+  location ^~ /.well-known/acme-challenge/ {
+    break;
+  }
+}

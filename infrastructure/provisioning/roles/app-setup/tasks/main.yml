@@ -1,0 +1,6 @@
+---
+#- name: Set directory permissions to 755 for /home/deploy/promptinator/public/images
+#  file:
+#    path: /home/{{deploy_user}}/{{app_name}}/public/images
+#    mode: 0777
+#    recurse: yes
