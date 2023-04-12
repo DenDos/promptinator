@@ -1,7 +1,7 @@
 ---
 - hosts: deploy
   vars:
-    git_repo_url: https://github.com/DenDos/promptinator
+    git_repo_url: https://github.com/DenDos/promptinator.git
     playbook_app_name: promptinator
     playbook_deploy_user: deploy
     use_ssl: false
@@ -43,8 +43,6 @@
       shell:
         cmd: git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
       become: no
-
-      when: not repo_dir.stat.exists
 
     - name: Checkout main branch and pull latest changes
       shell:

@@ -1,6 +1,7 @@
 /node_modules/
 /.idea/
 /dist/
+/.env
 /infrastructure/provisioning/playbooks/secret_id_rsa
 /infrastructure/provisioning/playbooks/secret_id_rsa.pub
 /infrastructure/provisioning/playbooks/secret_vars.yaml
