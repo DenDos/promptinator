@@ -1,6 +1,7 @@
 import cors, { CorsOptions } from 'cors'
 import express, { Express } from 'express'
 import session from 'express-session'
+import 'module-alias/register'
 import morgan from 'morgan'
 import passport from 'passport'
 import path from 'path'
