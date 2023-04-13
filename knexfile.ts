@@ -4,7 +4,13 @@ dotenv.config()
 
 const CONFIG = {
   client: 'pg',
-  connection: process.env.DATABASE_URL,
+  connection: {
+    // Specify your database connection details here
+    host: 'localhost',
+    user: 'deploy',
+    password: process.env.DB_PASSWORD,
+    database: 'promptinator',
+  },
   migrations: {
     directory: './migrations',
   },

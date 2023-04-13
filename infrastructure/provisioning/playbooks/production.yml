@@ -55,7 +55,7 @@
     #
     # - role: ../roles/postgress-app-init
     #   db_user: "{{ playbook_deploy_user }}"
-    #   db_name: "{{ playbook_app_name }}"
+    #   app_name: "{{ playbook_app_name }}"
     #   db_password: "{{ ansible_sudo_pass }}"
     #
     # - role: ../roles/app-setup

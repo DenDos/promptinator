@@ -57,6 +57,13 @@
       become: yes
       become_user: "{{ playbook_deploy_user }}"
 
+    - name: Run migrations
+      shell:
+        cmd: npm run migrate
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"
+
     - name: Restart the app
       shell:
         cmd: npm install && npm run build && npm run start:prod
