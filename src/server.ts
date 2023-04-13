@@ -1,6 +1,7 @@
 import cors, { CorsOptions } from 'cors'
 import express, { Express } from 'express'
-import session from 'express-session'
+import session, { Store } from 'express-session'
+import createMemoryStore from 'memorystore'
 import 'module-alias/register'
 import morgan from 'morgan'
 import passport from 'passport'
@@ -15,9 +16,19 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
+// Define the type of the MemoryStore constructor
+interface MemoryStoreConstructor {
+  new (options: { checkPeriod: number }): Store
+}
+// Create the MemoryStore constructor
+const MemoryStore = createMemoryStore(session) as MemoryStoreConstructor
 // Use express-session middleware
 app.use(
   session({
+    cookie: { maxAge: 86400000 },
+    store: new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    }),
     secret: 'some-secret-key',
     resave: false,
     saveUninitialized: false,
