@@ -6,14 +6,25 @@
     update_cache: yes
     state: present
 
-- name: Install npm packages globally
+- name: Install tspath globally
   npm:
-    name:
-      - typescript
-      - tspath
-      - pm2
+    name: tspath
     global: yes
+
+- name: Install pm2 globally
+  npm:
+    name: pm2
+    global: yes
+
+- name: Install typescript globally
+  npm:
+    name: typescript
+    global: yes
+
 
 - name: Install pm2-logrotate
   ansible.builtin.command:
-    cmd: pm2 install pm2-logrotate
+    cmd: |
+      pm2 install pm2-logrotate
+      pm2 set pm2-logrotate:max_size 100M
+      pm2 set pm2-logrotate:compress true
