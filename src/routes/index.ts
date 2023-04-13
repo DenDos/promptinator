@@ -22,7 +22,7 @@ router.post('/prompts', promptsController.create)
 
 // Define routes
 router.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the custom OAuth example!')
+  res.send('Welcome to the custom OAuth example updated!')
 })
 
 export default router

@@ -4,88 +4,77 @@
     git_repo_url: https://github.com/DenDos/promptinator.git
     playbook_app_name: promptinator
     playbook_deploy_user: deploy
-    use_ssl: false
   become: true
   vars_files:
     - ./secret_vars.yaml
   tasks:
-#    - name: Check if repository exists
-#      ansible.builtin.stat:
-#        path: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-#      register: repo_dir
-#
-#    - name: Clone Git repository if directory does not exist
-#      ansible.builtin.git:
-#        repo: "{{ git_repo_url }}"
-#        dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-#        clone: yes
-#        update: no
-#      become: yes
-#      become_user: "{{ playbook_deploy_user }}"
-#
-#    - name: Create a shared directory
-#      ansible.builtin.file:
-#        path: /home/{{ playbook_deploy_user }}/shared
-#        state: directory
-#        mode: '0755'
-#      become: yes
-#      become_user: "{{ playbook_deploy_user }}"
-#
-#
-#    - name: Create empty .env file
-#      ansible.builtin.file:
-#        path: /home/{{ playbook_deploy_user }}/shared/.env
-#        state: touch
-#        mode: '0755'
-#      become: yes
-#      become_user: "{{ playbook_deploy_user }}"
-#
-#    - name: Create .env symlink to shared folder
-#      ansible.builtin.file:
-#        src: /home/{{ playbook_deploy_user }}/shared/.env
-#        dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/.env
-#        state: link
-#
-#    - name: Add exception for repository directory
-#      shell:
-#        cmd: git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-#      become: yes
-#      become_user: "{{ playbook_deploy_user }}"
-#
-#    - name: Checkout main branch and pull latest changes
-#      shell:
-#        cmd: git checkout main && git pull
-#        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-#      become: yes
-#      become_user: "{{ playbook_deploy_user }}"
-#
-#    - name: install dependencies
-#      shell:
-#        cmd: npm install
-#        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-#      become: yes
-#      register: result
-#      become_user: "{{ playbook_deploy_user }}"
-#
-#    - name: build the app
-#      shell:
-#        cmd: npm run build
-#        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-#      become: yes
-#      register: result
-#      become_user: "{{ playbook_deploy_user }}"
+    - name: Check if repository exists
+      ansible.builtin.stat:
+        path: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      register: repo_dir
 
-#    - name: Build the app
-#      shell:
-#        cmd: npm run build
-#        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-#      become: yes
-#      become_user: "{{ playbook_deploy_user }}"
+    - name: Clone Git repository if directory does not exist
+      ansible.builtin.git:
+        repo: "{{ git_repo_url }}"
+        dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+        clone: yes
+        update: no
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"
 
+    - name: Create a shared directory
+      ansible.builtin.file:
+        path: /home/{{ playbook_deploy_user }}/shared
+        state: directory
+        mode: '0755'
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"
+
+    - name: Create empty .env file
+      ansible.builtin.file:
+        path: /home/{{ playbook_deploy_user }}/shared/.env
+        state: touch
+        mode: '0755'
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"
+
+    - name: Create .env symlink to shared folder
+      ansible.builtin.file:
+        src: /home/{{ playbook_deploy_user }}/shared/.env
+        dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/.env
+        state: link
+
+    - name: Add exception for repository directory
+      shell:
+        cmd: git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"
+
+    - name: Checkout main branch and pull latest changes
+      shell:
+        cmd: git checkout main && git pull
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"
+
+    - name: install dependencies
+      shell:
+        cmd: npm install
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: yes
+      register: result
+      become_user: "{{ playbook_deploy_user }}"
+
+    - name: Build the app
+      shell:
+        cmd: npm run build
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+      become: yes
+      become_user: "{{ playbook_deploy_user }}"
 
     - name: Run start:prod scripts
       shell:
-        cmd: pm2 start ecosystem.config.js --env production
+        cmd: pm2 reload ecosystem.config.js --env production
         chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
       become: yes
       become_user: "{{ playbook_deploy_user }}"
