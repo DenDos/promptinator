@@ -11,7 +11,7 @@
     "deploy": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/deploy.yml",
     "setup_infratructure:prod": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/production.yml",
     "build": "npx tsc",
-    "start:prod": "pm2 restart dist/src/server.js --user deploy",
+    "start:prod": "pm2 reload ecosystem.config.js --env production",
     "dev": "NODE_ENV=development ts-node-dev --respawn -r tsconfig-paths/register --transpile-only src/server.ts",
     "migrate": "npx knex migrate:latest",
     "reset_db": "knex migrate:rollback --all && yarn migrate"

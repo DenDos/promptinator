@@ -14,6 +14,7 @@
       register: repo_dir
 
     - name: Clone Git repository if directory does not exist
+      when: not repo_dir.stat.exists
       ansible.builtin.git:
         repo: "{{ git_repo_url }}"
         dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
@@ -23,6 +24,7 @@
       become_user: "{{ playbook_deploy_user }}"
 
     - name: Create a shared directory
+      when: not repo_dir.stat.exists
       ansible.builtin.file:
         path: /home/{{ playbook_deploy_user }}/shared
         state: directory
@@ -31,6 +33,7 @@
       become_user: "{{ playbook_deploy_user }}"
 
     - name: Create empty .env file
+      when: not repo_dir.stat.exists
       ansible.builtin.file:
         path: /home/{{ playbook_deploy_user }}/shared/.env
         state: touch
@@ -39,12 +42,14 @@
       become_user: "{{ playbook_deploy_user }}"
 
     - name: Create .env symlink to shared folder
+      when: not repo_dir.stat.exists
       ansible.builtin.file:
         src: /home/{{ playbook_deploy_user }}/shared/.env
         dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/.env
         state: link
 
     - name: Add exception for repository directory
+      when: not repo_dir.stat.exists
       shell:
         cmd: git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
       become: yes
@@ -57,24 +62,9 @@
       become: yes
       become_user: "{{ playbook_deploy_user }}"
 
-    - name: install dependencies
+    - name: Restart the app
       shell:
-        cmd: npm install
-        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-      become: yes
-      register: result
-      become_user: "{{ playbook_deploy_user }}"
-
-    - name: Build the app
-      shell:
-        cmd: npm run build
-        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-      become: yes
-      become_user: "{{ playbook_deploy_user }}"
-
-    - name: Run start:prod scripts
-      shell:
-        cmd: pm2 reload ecosystem.config.js --env production
+        cmd: npm install && npm run build && npm run start:prod
         chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
       become: yes
       become_user: "{{ playbook_deploy_user }}"
