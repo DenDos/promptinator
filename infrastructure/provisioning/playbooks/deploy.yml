@@ -48,17 +48,11 @@
         dest: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/.env
         state: link
 
-    - name: Add exception for repository directory
-      when: not repo_dir.stat.exists
-      shell:
-        cmd: git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-      become: yes
-      become_user: "{{ playbook_deploy_user }}"
-
     - name: Checkout main branch and pull latest changes
       shell:
-        cmd: git checkout main && git pull
-        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+        cmd: |
+          git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+          git checkout main && git pull
       become: yes
       become_user: "{{ playbook_deploy_user }}"
 
