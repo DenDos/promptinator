@@ -13,7 +13,10 @@ export const renderError = ({
   res,
   exception,
 }: renderErrorInterface): void => {
-  if (status === 500 && exception) console.error('========================', exception?.message)
+  if (status === 500 && exception) {
+    const currentTime = new Date().toISOString().replace('T', ' ').split('.')[0]
+    console.error(`==========${currentTime}==============`, exception?.message)
+  }
   res.status(status).json({ error: message })
 }
 
