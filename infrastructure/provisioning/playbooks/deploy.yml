@@ -75,25 +75,17 @@
 #      register: result
 #      become_user: "{{ playbook_deploy_user }}"
 
+#    - name: Build the app
+#      shell:
+#        cmd: npm run build
+#        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
+#      become: yes
+#      become_user: "{{ playbook_deploy_user }}"
 
-    - name: Execute npx tspath -f dist
-      ansible.builtin.command:
-        cmd: tspath -f dist
-        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
-      become: yes
-      register: result
-      become_user: "{{ playbook_deploy_user }}"
-
-    - name: Display standard error
-      debug:
-        var: result.stderr
-
-    - name: Display stdout
-      debug:
-        var: result.stdout
 
     - name: Run start:prod scripts
       shell:
-        cmd: pm2 reload /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}/dist/src/server.js
+        cmd: pm2 start ecosystem.config.js --env production
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
       become: yes
       become_user: "{{ playbook_deploy_user }}"
