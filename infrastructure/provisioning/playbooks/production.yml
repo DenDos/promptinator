@@ -38,6 +38,7 @@
 #      app_domain: "{{ playbook_app_domain }}"
     #
     - role: ../roles/pm2-setup
+      deploy_user: "{{ playbook_deploy_user }}"
     #
 #    - role: ../roles/ansible-role-certbot
 #      certbot_install_method: snap

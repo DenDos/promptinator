@@ -9,6 +9,7 @@ module.exports = {
       max_memory_restart: '450M', // Maximum memory allowed before restarting the application
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
       max_size: '100M',
+      compress: true,
       env: {
         NODE_ENV: 'development', // Environment variables for the development environment
       },
