@@ -1,24 +1,17 @@
 ---
-- name: Install Node.js and npm
+- name: Install npm
   apt:
     name:
       - npm
     update_cache: yes
     state: present
 
-- name: Install TypeScript globally using npm
+- name: Install npm packages globally
   npm:
-    name: typescript
-    global: yes
-
-- name: Install tspath globally using npm
-  npm:
-    name: tspath
-    global: yes
-
-- name: Install PM2 globally using npm
-  npm:
-    name: pm2
+    name:
+      - typescript
+      - tspath
+      - pm2
     global: yes
 
 - name: Install pm2-logrotate
