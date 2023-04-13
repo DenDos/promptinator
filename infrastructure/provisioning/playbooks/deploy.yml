@@ -53,6 +53,7 @@
         cmd: |
           git config --global --add safe.directory /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
           git checkout main && git pull
+        chdir: /home/{{ playbook_deploy_user }}/{{ playbook_app_name }}
       become: yes
       become_user: "{{ playbook_deploy_user }}"
 

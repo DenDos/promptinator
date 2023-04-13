@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 const replaceHostName = (text: string, host: string | undefined): string => {
-  return text.replace(new RegExp('PLUGIN_HOSTNAME', 'g'), `http://${host}`)
+  return text.replace(new RegExp('PLUGIN_HOSTNAME', 'g'), `https://${host}`)
 }
 
 export const getOpenAiYaml = (req: Request, res: Response): void => {

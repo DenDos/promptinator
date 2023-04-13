@@ -1,13 +1,19 @@
 server {
   server_name {{ app_domain }};
-  root /home/{{deploy_user}}/{{app_name}}/current/public;
 
-  passenger_enabled on;
-  passenger_app_env production;
+  # Serve static files from the "public" directory
+  location /images/ {
+      alias /home/{{ deploy_user }}/{{ app_name }}/public/images;
+  }
 
-  location /cable {
-    passenger_app_group_name {{app_name}}_websocket;
-    passenger_force_max_concurrent_requests_per_process 0;
+  # Reverse proxy for the Node.js application
+  location / {
+      proxy_pass http://localhost:3000; # The address of the Node.js app
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection 'upgrade';
+      proxy_set_header Host $host;
+      proxy_cache_bypass $http_upgrade;
   }
 
   # Allow uploads up to 100MB in size
@@ -22,12 +28,12 @@ server {
     break;
   }
 
-  listen [::]:443 ssl ipv6only=on;
-  listen 443 ssl;
-  ssl_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/{{ app_domain }}/privkey.pem;
-  #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-  #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    listen [::]:443 ssl ipv6only=on;
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ app_domain }}/privkey.pem;
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 server {
