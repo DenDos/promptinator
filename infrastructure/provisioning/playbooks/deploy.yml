@@ -34,10 +34,11 @@
 
     - name: Create empty .env file
       when: not repo_dir.stat.exists
-      ansible.builtin.file:
-        path: /home/{{ playbook_deploy_user }}/shared/.env
-        state: touch
-        mode: '0755'
+      ansible.builtin.copy:
+        dest: /home/{{ playbook_deploy_user }}/shared/.env
+        content: |
+          DB_PASSWORD={{ ansible_sudo_pass }}
+        mode: '0775'
       become: yes
       become_user: "{{ playbook_deploy_user }}"
 

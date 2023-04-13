@@ -20,3 +20,7 @@
   npm:
     name: pm2
     global: yes
+
+- name: Install pm2-logrotate
+  ansible.builtin.command:
+    cmd: pm2 install pm2-logrotate

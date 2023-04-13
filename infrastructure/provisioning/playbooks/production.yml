@@ -32,22 +32,22 @@
     #       versions: [ "16.13.2" ]
     #       global: "16.13.2"
     #
-    - role: ../roles/nginx-app-role
-      deploy_user: "{{ playbook_deploy_user }}"
-      app_name: "{{ playbook_app_name }}"
-      app_domain: "{{ playbook_app_domain }}"
+#    - role: ../roles/nginx-app-role
+#      deploy_user: "{{ playbook_deploy_user }}"
+#      app_name: "{{ playbook_app_name }}"
+#      app_domain: "{{ playbook_app_domain }}"
     #
-#    - role: ../roles/pm2-setup
+    - role: ../roles/pm2-setup
     #
-    - role: ../roles/ansible-role-certbot
-      certbot_install_method: snap
-      certbot_create_if_missing: true
-      certbot_admin_email: cotoha92@gmail.com
-      when: use_ssl
-      certbot_certs:
-        - email: cotoha92@gmail.com
-          domains:
-            - "{{ playbook_app_domain }}"
+#    - role: ../roles/ansible-role-certbot
+#      certbot_install_method: snap
+#      certbot_create_if_missing: true
+#      certbot_admin_email: cotoha92@gmail.com
+#      when: use_ssl
+#      certbot_certs:
+#        - email: cotoha92@gmail.com
+#          domains:
+#            - "{{ playbook_app_domain }}"
     #
     # - role: ../roles/log-rotate-role
     #   deploy_user: "{{ playbook_deploy_user }}"
