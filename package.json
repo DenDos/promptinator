@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "_moduleAliases": {
-    "@src": "dist/src"
+    "@src": "dist/src",
+    "@root": "dist"
   },
   "scripts": {
     "deploy": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/deploy.yml",
