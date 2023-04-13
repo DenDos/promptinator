@@ -17,18 +17,9 @@ const CONFIG = {
   seeds: {
     directory: './seeds',
   },
-  staging: {
-    pool: {
-      min: 2,
-      max: 10,
-    },
-  },
-
-  production: {
-    pool: {
-      min: 2,
-      max: 10,
-    },
+  pool: {
+    min: 2,
+    max: 10,
   },
 }
 
