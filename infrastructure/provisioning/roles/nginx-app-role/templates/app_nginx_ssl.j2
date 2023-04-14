@@ -3,7 +3,7 @@ server {
 
   # Serve static files from the "public" directory
   location /images/ {
-      alias /home/{{ deploy_user }}/{{ app_name }}/public/images;
+      alias /home/{{ deploy_user }}/{{ app_name }}/public/images/;
   }
 
   # Reverse proxy for the Node.js application
