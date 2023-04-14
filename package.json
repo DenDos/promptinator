@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "_moduleAliases": {
+    "@src": "dist/src",
+    "@root": "dist"
+  },
   "scripts": {
     "deploy": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/deploy.yml",
     "setup_infratructure:prod": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/production.yml",

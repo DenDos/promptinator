@@ -7,8 +7,6 @@ import morgan from 'morgan'
 import passport from 'passport'
 import path from 'path'
 
-import '../register-aliases'
-
 import router from '@src/routes/index'
 
 const app: Express = express()
