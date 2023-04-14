@@ -3,8 +3,8 @@ import * as moduleAlias from 'module-alias'
 
 if (process.env.NODE_ENV === 'production') {
   moduleAlias.addAliases({
-    '@src': 'dist/src',
-    '@root': 'dist',
+    '@src': __dirname + '/src',
+    '@root': __dirname,
   })
 } else {
   moduleAlias.addAliases({
