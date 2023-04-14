@@ -1,16 +1,14 @@
-// register-aliases.ts
+// register-aliases.js
 import moduleAlias from 'module-alias'
 
 if (process.env.NODE_ENV === 'production') {
   // Define aliases for production
   moduleAlias.addAliases({
-    '@src': 'dist/src',
-    '@root': './dist',
+    '@src': __dirname + '/dist/src',
   })
 } else {
   // Define aliases for local development
   moduleAlias.addAliases({
-    '@src': './src',
-    '@root': './',
+    '@src': __dirname + '/src',
   })
 }
