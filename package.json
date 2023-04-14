@@ -40,7 +40,6 @@
     "express-session": "^1.17.3",
     "knex": "^2.4.2",
     "memorystore": "^1.6.7",
-    "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22",
     "passport": "^0.6.0",
