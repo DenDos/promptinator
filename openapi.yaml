@@ -6,7 +6,7 @@ info:
 servers:
   - url: PLUGIN_HOSTNAME  # Replace PLUGIN_HOSTNAME with the actual URL
 paths:
-  '/prompts/{id}':
+  'api/prompts/{id}':
     put:
       operationId: updatePrompt
       summary: Update an existing prompt with name and prompt by ID
@@ -59,7 +59,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorMessage'
-  '/prompts':
+  'api/prompts':
     get:
       operationId: getPrompts
       summary: Get list of saved prompts
