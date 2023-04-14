@@ -5,17 +5,27 @@
     update_cache: yes
     state: present
 
-- name: Check if certbot exists
+- name: Check if certbot private key exists for any domain
   stat:
-    path: /etc/letsencrypt/live/{{app_domain}}/privkey.pem
-  register: certbot_key
+    path: "/etc/letsencrypt/live/{{ item }}/privkey.pem"
+  loop: "{{ domains }}"
+  register: certbot_key_results
+
+- name: Set a variable if any private key exists
+  set_fact:
+    certbot_key_exists: true
+  when: item.stat.exists
+  loop: "{{ certbot_key_results.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+  no_log: true
 
 - name: Set ngix config without SSL
   template:
     src: app_nginx_ip.j2
     dest: /etc/nginx/sites-available/{{ app_name }}
     mode: 0644
-  when: certbot_key.stat.exists == False
+  when: certbot_key_exists is not defined
   notify: restart nginx
 
 - name: Set ngix config with SSL
@@ -23,7 +33,7 @@
     src: app_nginx_ssl.j2
     dest: /etc/nginx/sites-available/{{ app_name }}
     mode: 0644
-  when: certbot_key.stat.exists
+  when: certbot_key_exists
   notify: restart nginx
 
 - name: Link app site enabled config

@@ -7,7 +7,7 @@ const CONFIG = {
   connection: {
     // Specify your database connection details here
     host: 'localhost',
-    user: 'deploy',
+    user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: 'promptinator',
   },

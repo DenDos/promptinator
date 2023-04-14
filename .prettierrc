@@ -6,7 +6,7 @@
   "semi": false,
   "trailingComma": "es5",
   "arrowParens": "always",
-  "importOrder": ["<THIRD_PARTY_MODULES>", "@src|@root", "public/", "^[./]"],
+  "importOrder": ["<THIRD_PARTY_MODULES>", "register-aliases", "@src|@root", "public/", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

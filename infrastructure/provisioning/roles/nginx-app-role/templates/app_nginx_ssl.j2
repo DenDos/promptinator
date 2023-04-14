@@ -1,3 +1,4 @@
+{% for app_domain in domains %}
 server {
   server_name {{ app_domain }};
 
@@ -28,22 +29,25 @@ server {
     break;
   }
 
-    listen [::]:443 ssl ipv6only=on;
-    listen 443 ssl;
-    ssl_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ app_domain }}/privkey.pem;
-    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+  listen [::]:443 ssl ipv6only=on;
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/{{ app_domain }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ app_domain }}/privkey.pem;
+  #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+  #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 server {
-    if ($host = {{ app_domain }}) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
+  if ($host = {{ app_domain }}) {
+      return 301 https://$host$request_uri;
+  } # managed by Certbot
 
   listen 80;
   listen [::]:80;
 
   server_name {{ app_domain }};
-    return 404;
+  return 404;
 }
+
+
+{% endfor %}

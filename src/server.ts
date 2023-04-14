@@ -1,11 +1,13 @@
 import cors, { CorsOptions } from 'cors'
 import express, { Express } from 'express'
+import listEndpoints from 'express-list-endpoints'
 import session, { Store } from 'express-session'
 import createMemoryStore from 'memorystore'
-import 'module-alias/register'
 import morgan from 'morgan'
 import passport from 'passport'
 import path from 'path'
+
+import '../register-aliases'
 
 import router from '@src/routes/index'
 
@@ -20,6 +22,7 @@ if (process.env.NODE_ENV === 'development') {
 interface MemoryStoreConstructor {
   new (options: { checkPeriod: number }): Store
 }
+
 // Create the MemoryStore constructor
 const MemoryStore = createMemoryStore(session) as MemoryStoreConstructor
 // Use express-session middleware
@@ -61,4 +64,5 @@ app.use(router)
 // Start the server
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000')
+  console.log(listEndpoints(app))
 })
