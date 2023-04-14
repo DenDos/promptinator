@@ -1,9 +1,10 @@
+import '../aliasConfig'
+
 import cors, { CorsOptions } from 'cors'
 import express, { Express } from 'express'
 import listEndpoints from 'express-list-endpoints'
 import session, { Store } from 'express-session'
 import createMemoryStore from 'memorystore'
-import 'module-alias/register'
 import morgan from 'morgan'
 import passport from 'passport'
 import path from 'path'

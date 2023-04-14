@@ -11,7 +11,7 @@ router.get('/openapi.yaml', openAiController.getOpenAiYaml)
 router.use('/api', apiRouter)
 
 router.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the custom OAuth example2')
+  res.send('Welcome to the custom OAuth example1')
 })
 
 export default router
