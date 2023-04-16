@@ -11,7 +11,7 @@
     "authorization_url": "https://promptinator.pro/auth/token",
     "authorization_content_type": "application/json",
     "verification_tokens": {
-      "openai": "abc123456"
+      "openai": "96faa9379913444aa86bb77ea107fd32"
     }
   },
   "api": {
