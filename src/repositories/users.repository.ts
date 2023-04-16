@@ -30,7 +30,7 @@ class UsersRepositoryImpl implements UsersRepositoryInterface {
         if (err) return reject()
         if (typeof payload !== 'string' && payload) {
           const id = payload['id'] as number
-          return this.find(id)
+          return resolve(this.find(id))
         } else {
           return reject()
         }
