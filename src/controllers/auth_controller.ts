@@ -6,11 +6,8 @@ import { helpers } from '@src/utils'
 import { serverError } from '@src/utils/serverErrors'
 
 export const googleAuthRedirect = (req: Request, res: Response): void => {
-  const state = {
-    query: req.query,
-  }
   const service = new GoogleAuthService(req)
-  const url = service.generateAuthUrl(state)
+  const url = service.generateAuthUrl(req.query)
   res.redirect(url)
 }
 
@@ -19,13 +16,12 @@ export const googleAuthCallback = async (req: Request, res: Response) => {
   const service = new GoogleAuthService(req)
 
   const parsedState = helpers.parseJSON(state as string)
-  console.log(parsedState, '=======parsedState======')
+  const redirectUrl = parsedState?.redirect_uri as string
 
   try {
     const userInfo = await service.fetchUserData(code as string)
     const user = await UsersRepository.handleGoogleLogin(userInfo)
-    console.log(user, user.jwtToken(), '=======user======')
-    res.redirect('/')
+    res.redirect(`${redirectUrl}?code=${user.jwtToken()}`)
   } catch (error) {
     serverError({ res, exception: error as Error })
   }
