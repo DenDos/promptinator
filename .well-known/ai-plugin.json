@@ -5,8 +5,14 @@
   "description_for_human": "A simple API that gives you an easy way to manage your prompts.",
   "description_for_model": "A simple API that gives you an easy way to manage your prompts. You can use it to create, update, show and delete prompts and then call them from the chatGpt UI",
   "auth": {
-    "type": "none"
-  },
+    "type": "oauth",
+    "client_url": "https://promptinator.pro/auth/google",
+    "scope": "",
+    "authorization_url": "https://promptinator.pro/auth/token",
+    "authorization_content_type": "application/json",
+    "verification_tokens": {
+      "openai": "abc123456"
+    },
   "api": {
     "type": "openapi",
     "url": "PLUGIN_HOSTNAME/openapi.yaml",
