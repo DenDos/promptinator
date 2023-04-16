@@ -15,7 +15,7 @@ export const openAiCodeAuth = async (req: Request, res: Response) => {
   console.log(req.query, '=======req.query======')
   console.log(req.params, '=======req.params======')
   console.log(req.body, '=======req.body======')
-  const { code } = req.query
+  const { code } = req.body
   try {
     const user = await UsersRepository.findByToken(code as string)
     if (user) {
