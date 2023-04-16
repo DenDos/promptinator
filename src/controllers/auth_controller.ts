@@ -12,18 +12,19 @@ export const googleAuthRedirect = (req: Request, res: Response): void => {
 }
 
 export const openAiCodeAuth = async (req: Request, res: Response) => {
-  console.log(req.query, '=======req.query======')
-  console.log(req.params, '=======req.params======')
-  console.log(req.body, '=======req.body======')
   const { code } = req.body
   try {
     const user = await UsersRepository.findByToken(code as string)
+    console.log(user, '=======user======')
     if (user) {
+      console.log('=======here======')
       res.status(200).json({ access_token: user.jwtToken(), token_type: 'Bearer' })
     } else {
+      console.log('=======here1======')
       return renderUnuathorized({ res })
     }
   } catch (err) {
+    console.log('=======here2======', err)
     return renderUnuathorized({ res })
   }
 }
