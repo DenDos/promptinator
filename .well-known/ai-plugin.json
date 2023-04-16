@@ -12,7 +12,8 @@
     "authorization_content_type": "application/json",
     "verification_tokens": {
       "openai": "abc123456"
-    },
+    }
+  },
   "api": {
     "type": "openapi",
     "url": "PLUGIN_HOSTNAME/openapi.yaml",
