@@ -13,7 +13,11 @@ export const googleAuthRedirect = (req: Request, res: Response): void => {
 
 export const openAiCodeAuth = async (req: Request, res: Response) => {
   const { code } = req.body
+  console.log(req.query, '=======req.query======')
+  console.log(req.params, '=======req.params======')
+  console.log(req.body, '=======req.body======')
   try {
+    console.log('=======start======')
     const user = await UsersRepository.findByToken(code as string)
     console.log(user, '=======user======')
     if (user) {
