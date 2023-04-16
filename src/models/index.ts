@@ -1,1 +1,2 @@
-export { default as Prompt } from './prompt.model'
+export { PromptInterface } from './prompt.model'
+export { UserInterface, UserModel } from './user.model'

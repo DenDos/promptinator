@@ -114,25 +114,25 @@ components:
         id:  # Renamed from "prompt" to "id"
           type: integer
           description: Id of a prompt
-        prompt:
+        value:
           type: string
-          description: Body of a prompt
+          description: Body/value of a prompt
         name:
           type: string
           description: Name of a prompt
       required:
         - id  # Added "id" to the required properties
-        - prompt
+        - value
         - name
     promptRequestBody:
       type: object
       properties:
-        prompt:
+        value:
           type: string
-          description: Body of a prompt
+          description: Body/value of a prompt
         name:
           type: string
           description: Name of a prompt
       required:
-        - prompt
+        - value
         - name  # Added "name" to the required properties

@@ -8,15 +8,16 @@ import createMemoryStore from 'memorystore'
 import morgan from 'morgan'
 import passport from 'passport'
 import path from 'path'
+import * as process from 'process'
 
 import router from '@src/routes/index'
 
 const app: Express = express()
 
 // Use morgan middleware to log requests in "dev" format during development
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'))
-}
+// if (process.env.NODE_ENV === 'development') {
+app.use(morgan('dev'))
+// }
 
 // Define the type of the MemoryStore constructor
 interface MemoryStoreConstructor {
@@ -32,7 +33,7 @@ app.use(
     store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     }),
-    secret: 'some-secret-key',
+    secret: `${process.env.COOKIE_SECRET}`,
     resave: false,
     saveUninitialized: false,
   })

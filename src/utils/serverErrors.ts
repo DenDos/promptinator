@@ -15,9 +15,13 @@ export const renderError = ({
 }: renderErrorInterface): void => {
   if (status === 500 && exception) {
     const currentTime = new Date().toISOString().replace('T', ' ').split('.')[0]
-    console.error(`==========${currentTime}==============`, exception?.message)
+    console.error(`==========ERROR: ${currentTime}==============`, exception?.message)
   }
   res.status(status).json({ error: message })
+}
+
+export const renderUnuathorized = ({ res }: { res: Response }): void => {
+  renderError({ status: 401, message: 'Unauthorized', res })
 }
 
 export const serverError = ({ res, exception }: { res: Response; exception: Error }): void => {
