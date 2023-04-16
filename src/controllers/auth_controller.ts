@@ -7,7 +7,7 @@ import { serverError } from '@src/utils/serverErrors'
 
 export const googleAuthRedirect = (req: Request, res: Response): void => {
   const state = {
-    redirect_uri: req.params.redirect_uri,
+    query: req.query,
   }
   const service = new GoogleAuthService(req)
   const url = service.generateAuthUrl(state)
