@@ -1,13 +1,17 @@
+import jwt from 'jsonwebtoken'
 import { Knex } from 'knex'
 
 import { UserInterface, UserModel } from '@src/models'
 import RepositoryInterface from '@src/repositories/repositories_interface'
 import { GoogleUserDataInterface } from '@src/services/google_auth_service'
 import { knexClient } from '@src/utils'
+import { renderUnuathorized } from '@src/utils/serverErrors'
 
 interface UsersRepositoryInterface extends RepositoryInterface<UserModel> {
   handleGoogleLogin: (userData: GoogleUserDataInterface) => Promise<UserModel>
+  findByToken: (token: string) => Promise<UserModel | null>
 }
+
 interface UsersFindByProps {
   id?: number | string
   email?: string
@@ -15,8 +19,23 @@ interface UsersFindByProps {
 
 class UsersRepositoryImpl implements UsersRepositoryInterface {
   readonly tableName = 'users'
+
   constructor(private readonly dbClient: Knex) {
     this.dbClient = knexClient
+  }
+
+  async findByToken(token: string): Promise<UserModel | null> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, process.env.JWT_SECRET as string, async (err, payload) => {
+        if (err) return reject()
+        if (typeof payload !== 'string' && payload) {
+          const id = payload['id'] as number
+          return this.find(id)
+        } else {
+          return reject()
+        }
+      })
+    })
   }
 
   async handleGoogleLogin(userData: GoogleUserDataInterface): Promise<UserModel> {

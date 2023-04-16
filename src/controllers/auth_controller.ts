@@ -3,12 +3,29 @@ import { Request, Response } from 'express'
 import { UsersRepository } from '@src/repositories'
 import { GoogleAuthService } from '@src/services'
 import { helpers } from '@src/utils'
-import { serverError } from '@src/utils/serverErrors'
+import { renderUnuathorized, serverError } from '@src/utils/serverErrors'
 
 export const googleAuthRedirect = (req: Request, res: Response): void => {
   const service = new GoogleAuthService(req)
   const url = service.generateAuthUrl(req.query)
   res.redirect(url)
+}
+
+export const openAiCodeAuth = async (req: Request, res: Response) => {
+  console.log(req.query, '=======req.query======')
+  console.log(req.params, '=======req.params======')
+  console.log(req.body, '=======req.body======')
+  const { code } = req.query
+  try {
+    const user = await UsersRepository.findByToken(code as string)
+    if (user) {
+      res.status(200).json({ access_token: user.jwtToken(), token_type: 'Bearer' })
+    } else {
+      return renderUnuathorized({ res })
+    }
+  } catch (err) {
+    return renderUnuathorized({ res })
+  }
 }
 
 export const googleAuthCallback = async (req: Request, res: Response) => {
