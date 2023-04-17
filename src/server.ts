@@ -1,5 +1,6 @@
 import '../aliasConfig'
 
+import bodyParser from 'body-parser'
 import cors, { CorsOptions } from 'cors'
 import express, { Express } from 'express'
 import listEndpoints from 'express-list-endpoints'
@@ -41,6 +42,9 @@ app.use(
 
 // Middleware to parse JSON request bodies
 app.use(express.json())
+
+app.use(bodyParser.json({ limit: '10mb' }))
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
 
 // Middleware to parse URL-encoded request bodies
 app.use(express.urlencoded({ extended: true }))
