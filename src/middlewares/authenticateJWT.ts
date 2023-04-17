@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import jwt from 'jsonwebtoken'
 
 import { renderUnuathorized } from '@src/utils/serverErrors'
 
@@ -16,6 +15,7 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
     const user = await UsersRepository.findByToken(token)
     if (user) {
       req.user = user
+      next()
     } else {
       return renderUnuathorized({ res })
     }
