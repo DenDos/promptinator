@@ -53,7 +53,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     } else {
       renderUnprocessable({
         res,
-        message: `On a free account you can create only ${FREE_USER_PROMPTS_LIMIT} prompts. If you're excited about promptinator and would like to unlock more features <a href="mailto:${DEVELOPER_EMAIL}">contact us</a>`,
+        message: `On a free account you can create only ${FREE_USER_PROMPTS_LIMIT} prompts. If you're excited about promptinator and would like to unlock more features contact us: ${DEVELOPER_EMAIL}`,
       })
     }
   } catch (err) {
