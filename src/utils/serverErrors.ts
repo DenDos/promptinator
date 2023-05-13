@@ -20,6 +20,10 @@ export const renderError = ({
   res.status(status).json({ error: message })
 }
 
+export const renderUnprocessable = ({ message = 'Unauthorized', res }: { res: Response; message?: string }): void => {
+  renderError({ status: 422, message, res })
+}
+
 export const renderUnuathorized = ({ message = 'Unauthorized', res }: { res: Response; message?: string }): void => {
   renderError({ status: 401, message, res })
 }

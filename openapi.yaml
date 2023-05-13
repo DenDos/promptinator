@@ -94,6 +94,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/promptAttributes'
+        '422':
+          description: Unprocessable entity error. Error message response will contain related information and it can be shown to the user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
         '500':
           description: Internal server error - command execution failed
           content:

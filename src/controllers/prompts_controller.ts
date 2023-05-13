@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { PromptInterface, PromptModel, UserModel } from '@src/models'
 import { PromptsPolicy } from '@src/policies'
 import { DEVELOPER_EMAIL, FREE_USER_PROMPTS_LIMIT } from '@src/utils/constants'
-import { render200, render404, renderUnuathorized, serverError } from '@src/utils/serverErrors'
+import { render200, render404, renderUnprocessable, renderUnuathorized, serverError } from '@src/utils/serverErrors'
 
 import PromptsRepository from '../repositories/prompts.repository'
 
@@ -51,7 +51,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
       const newPrompt = await PromptsRepository.create(params)
       res.status(200).json(newPrompt)
     } else {
-      renderUnuathorized({
+      renderUnprocessable({
         res,
         message: `On a free account you can create only ${FREE_USER_PROMPTS_LIMIT} prompts. If you're excited about promptinator and would like to unlock more features <a href="mailto:${DEVELOPER_EMAIL}">contact us</a>`,
       })
