@@ -5,7 +5,6 @@ import { UserInterface, UserModel } from '@src/models'
 import RepositoryInterface from '@src/repositories/repositories_interface'
 import { GoogleUserDataInterface } from '@src/services/google_auth_service'
 import { knexClient } from '@src/utils'
-import { renderUnuathorized } from '@src/utils/serverErrors'
 
 interface UsersRepositoryInterface extends RepositoryInterface<UserModel> {
   handleGoogleLogin: (userData: GoogleUserDataInterface) => Promise<UserModel>

@@ -1,11 +1,11 @@
 import { Knex } from 'knex'
 
-import { PromptInterface } from '@src/models'
+import { PromptModel } from '@src/models'
 import RepositoryInterface from '@src/repositories/repositories_interface'
 import { knexClient } from '@src/utils'
 
-interface PromptsInterface extends RepositoryInterface<PromptInterface> {
-  all: (props: { user_id: number }) => Promise<PromptInterface[]>
+interface PromptsInterface extends RepositoryInterface<PromptModel> {
+  all: (props: { user_id: number }) => Promise<PromptModel[]>
 }
 interface PromptsFindByProps {
   id?: number | string
@@ -19,23 +19,31 @@ class PromptsRepositoryImpl implements PromptsInterface {
     this.dbClient = knexClient
   }
 
-  async all({ user_id }: { user_id: number }): Promise<PromptInterface[]> {
+  async all({ user_id }: { user_id: number }): Promise<PromptModel[]> {
     return this.dbClient.select('*').where({ user_id }).from(this.tableName)
   }
 
-  async create(data: PromptInterface): Promise<PromptInterface> {
+  async userPromptsCount({ user_id }: { user_id: number }): Promise<number> {
+    return this.dbClient
+      .from(this.tableName)
+      .where({ user_id })
+      .count('* as count')
+      .then((rows) => parseInt(rows[0].count))
+  }
+
+  async create(data: PromptModel): Promise<PromptModel> {
     const [newPrompt] = await this.dbClient(this.tableName).insert(data).returning('*')
     return newPrompt
   }
 
-  find(id: number | string): Promise<PromptInterface> {
+  find(id: number | string): Promise<PromptModel> {
     return this.dbClient(this.tableName)
       .select('*') // Select all columns
       .where({ id }) // Specify the condition (find the user with the specified ID)
       .first()
   }
 
-  findBy({ id, name, user_id }: PromptsFindByProps): Promise<PromptInterface> {
+  findBy({ id, name, user_id }: PromptsFindByProps): Promise<PromptModel> {
     const queryObject: PromptsFindByProps = { user_id }
     if (id) queryObject.id = id
     if (name) queryObject.name = name
@@ -45,7 +53,7 @@ class PromptsRepositoryImpl implements PromptsInterface {
       .first()
   }
 
-  async update(id: number | string, data: PromptInterface): Promise<PromptInterface> {
+  async update(id: number | string, data: PromptModel): Promise<PromptModel> {
     return this.dbClient(this.tableName)
       .update(data)
       .where({ id })

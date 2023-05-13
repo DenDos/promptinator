@@ -1,16 +1,26 @@
 export interface PromptInterface {
-  id: number | null
+  id?: number
   name: string
   value: string
-  user_id: string
-  created_at: Date | null
-  updated_at: Date | null
+  user_id: number
+  created_at?: Date
+  updated_at?: Date
 }
 
 export class PromptModel {
-  prompt: PromptInterface
+  id?: number
+  name: string
+  value: string
+  user_id: number
+  created_at?: Date
+  updated_at?: Date
 
-  constructor(prompt: PromptInterface) {
-    this.prompt = prompt
+  constructor(props: PromptInterface) {
+    this.id = props.id
+    this.name = props.name
+    this.value = props.value
+    this.user_id = props.user_id
+    this.created_at = props.created_at
+    this.updated_at = props.updated_at
   }
 }
