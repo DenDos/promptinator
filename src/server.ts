@@ -66,6 +66,10 @@ app.use(express.static(path.join(process.cwd(), 'public')))
 // Define routes
 app.use(router)
 
+// View Engine Setup
+app.set('views', path.join(__dirname, 'landing'))
+app.set('view engine', 'ejs')
+
 // Start the server
 app.listen(3000, () => {
   console.log(process.env.NODE_ENV, '=======process.env.NODE_ENV======')

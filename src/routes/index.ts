@@ -1,4 +1,5 @@
 import express, { Request, Response, Router } from 'express'
+import path from 'path'
 
 import { openAiController } from '@src/controllers/index'
 import { authenticateJWT } from '@src/middlewares'
@@ -14,7 +15,14 @@ router.use('/api', authenticateJWT, apiRouter)
 router.use('/auth', authRouter)
 
 router.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the custom OAuth example')
+  res.render('index', {
+    title: 'View Engine Demo',
+  })
+  res.sendFile(path.join(process.cwd(), 'src/landing/index.html'))
+})
+
+router.get('/index.css', (req: Request, res: Response) => {
+  res.sendFile(path.join(process.cwd(), 'src/landing/index.css'))
 })
 
 export default router

@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import fs from 'fs'
 import path from 'path'
 
-const replaceHostName = (text: string, host: string | undefined): string => {
+export const replaceHostName = (text: string, host: string | undefined): string => {
   return text.replace(new RegExp('PLUGIN_HOSTNAME', 'g'), `https://${host}`)
 }
 
@@ -28,7 +28,8 @@ export const getAiPluginConfig = (req: Request, res: Response): void => {
       res.status(404).send('Not found')
     } else {
       text = replaceHostName(text, req.headers.host)
-      res.status(200).type('text/json').send(text)
+      const jsonResponse = JSON.parse(text)
+      res.status(200).type('text/json').json(jsonResponse)
     }
   })
 }
