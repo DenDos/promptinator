@@ -18,7 +18,6 @@ router.get('/', (req: Request, res: Response) => {
   res.render('index', {
     title: 'View Engine Demo',
   })
-  res.sendFile(path.join(process.cwd(), 'src/landing/index.html'))
 })
 
 router.get('/index.css', (req: Request, res: Response) => {
