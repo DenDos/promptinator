@@ -11,7 +11,7 @@
     "deploy": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/deploy.yml",
     "copyfiles": "copyfiles src/landing/* dist",
     "setup_infratructure:prod": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/production.yml",
-    "build": "npx tsc && yarn copyfiles",
+    "build": "npx tsc",
     "test": "NODE_ENV=test jest",
     "start:prod": "pm2 reload ecosystem.config.js --env production",
     "watch:scss": "sass --watch src/landing/index.scss src/landing/index.css --style compressed",
