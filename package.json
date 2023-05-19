@@ -9,8 +9,9 @@
   },
   "scripts": {
     "deploy": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/deploy.yml",
+    "copyfiles": "copyfiles src/landing/* dist",
     "setup_infratructure:prod": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/production.yml",
-    "build": "npx tsc",
+    "build": "npx tsc && yarn copyfiles",
     "test": "NODE_ENV=test jest",
     "start:prod": "pm2 reload ecosystem.config.js --env production",
     "watch:scss": "sass --watch src/landing/index.scss src/landing/index.css --style compressed",
@@ -34,6 +35,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "body-parser": "^1.20.2",
+    "copyfiles": "^2.4.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
