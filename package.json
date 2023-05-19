@@ -9,7 +9,7 @@
   },
   "scripts": {
     "deploy": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/deploy.yml",
-    "copyfiles": "copyfiles src/landing/* dist",
+    "copyfiles": "cp -R src/landing dist/src/landing",
     "setup_infratructure:prod": "ansible-playbook -i ./infrastructure/provisioning/webservers.txt ./infrastructure/provisioning/playbooks/production.yml",
     "build": "npx tsc",
     "test": "NODE_ENV=test jest",
