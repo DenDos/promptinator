@@ -2,11 +2,6 @@
 server {
   server_name {{ app_domain }};
 
-  # Serve static files from the "public" directory
-  location /images/ {
-      alias /home/{{ deploy_user }}/{{ app_name }}/public/images/;
-  }
-
   # Reverse proxy for the Node.js application
   location / {
       proxy_pass http://localhost:3000; # The address of the Node.js app

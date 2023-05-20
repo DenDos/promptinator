@@ -14,7 +14,7 @@
     "build": "npx tsc",
     "test": "NODE_ENV=test jest",
     "start:prod": "pm2 reload ecosystem.config.js --env production",
-    "watch:scss": "sass --watch src/landing/index.scss src/landing/index.css --style compressed",
+    "watch:scss": "sass --watch src/landing/index.scss public/index.css --style compressed",
     "dev": "NODE_ENV=development ts-node-dev --respawn -r tsconfig-paths/register --transpile-only src/server.ts & yarn watch:scss",
     "migrate": "npx knex migrate:latest",
     "reset_db": "knex migrate:rollback --all && yarn migrate"

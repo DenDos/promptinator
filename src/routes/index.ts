@@ -20,8 +20,4 @@ router.get('/', (req: Request, res: Response) => {
   })
 })
 
-router.get('/index.css', (req: Request, res: Response) => {
-  res.sendFile(path.join(process.cwd(), 'src/landing/index.css'))
-})
-
 export default router
