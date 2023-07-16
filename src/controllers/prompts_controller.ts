@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { PromptInterface, PromptModel, UserModel } from '@src/models'
 import { PromptsPolicy } from '@src/policies'
 import { DEVELOPER_EMAIL, FREE_USER_PROMPTS_LIMIT } from '@src/utils/constants'
-import { render200, render404, renderUnprocessable, renderUnuathorized, serverError } from '@src/utils/serverErrors'
+import { render200, render404, renderUnprocessable, serverError } from '@src/utils/serverErrors'
 
 import PromptsRepository from '../repositories/prompts.repository'
 
