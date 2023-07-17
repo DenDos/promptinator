@@ -31,10 +31,12 @@ export const googleAuthCallback = async (req: Request, res: Response) => {
 
   const parsedState = helpers.parseJSON(state as string)
   const redirectUrl = parsedState?.redirect_uri as string
-
   try {
     const userInfo = await service.fetchUserData(code as string)
     const user = await UsersRepository.handleGoogleLogin(userInfo)
+    console.log(parsedState, '=======parsedState======')
+    console.log(userInfo, '=======userInfo======')
+    console.log(redirectUrl, '=======redirectUrl======')
     res.redirect(`${redirectUrl}?code=${user.jwtToken()}&state=${state}`)
   } catch (error) {
     serverError({ res, exception: error as Error })
