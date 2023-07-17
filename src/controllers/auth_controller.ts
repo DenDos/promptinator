@@ -37,7 +37,7 @@ export const googleAuthCallback = async (req: Request, res: Response) => {
     console.log(parsedState, '=======parsedState======')
     console.log(userInfo, '=======userInfo======')
     console.log(redirectUrl, '=======redirectUrl======')
-    res.redirect(`${redirectUrl}?code=${user.jwtToken()}&state=${state}`)
+    res.redirect(`${redirectUrl}?code=${user.jwtToken()}&state=${parsedState.state}`)
   } catch (error) {
     serverError({ res, exception: error as Error })
   }
